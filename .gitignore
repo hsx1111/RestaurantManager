@@ -1,0 +1,21 @@
+# ---- .NET ----
+bin/
+obj/
+*.user
+.vs/
+
+# Secrets locaux (la connection string avec mot de passe vit ici)
+appsettings.Development.json
+
+# ---- Angular / Node ----
+node_modules/
+dist/
+.angular/
+
+# ---- Editeurs / outils ----
+.vscode/
+.idea/
+.claude/
+
+# ---- OS ----
+.DS_Store

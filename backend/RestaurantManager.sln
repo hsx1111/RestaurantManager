@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantManager.API", "RestaurantManager.API\RestaurantManager.API.csproj", "{43A4561F-E8F0-4311-B3A2-69C8B8B2AF7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantManager.Core", "RestaurantManager.Core\RestaurantManager.Core.csproj", "{265E6E01-4923-4622-8ACB-C45079E854B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantManager.Infrastructure", "RestaurantManager.Infrastructure\RestaurantManager.Infrastructure.csproj", "{1D3AF6B9-1238-4F73-8ED9-FCCF09A5DA72}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{43A4561F-E8F0-4311-B3A2-69C8B8B2AF7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43A4561F-E8F0-4311-B3A2-69C8B8B2AF7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43A4561F-E8F0-4311-B3A2-69C8B8B2AF7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43A4561F-E8F0-4311-B3A2-69C8B8B2AF7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{265E6E01-4923-4622-8ACB-C45079E854B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{265E6E01-4923-4622-8ACB-C45079E854B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{265E6E01-4923-4622-8ACB-C45079E854B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{265E6E01-4923-4622-8ACB-C45079E854B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D3AF6B9-1238-4F73-8ED9-FCCF09A5DA72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D3AF6B9-1238-4F73-8ED9-FCCF09A5DA72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D3AF6B9-1238-4F73-8ED9-FCCF09A5DA72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D3AF6B9-1238-4F73-8ED9-FCCF09A5DA72}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
