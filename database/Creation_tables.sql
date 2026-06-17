@@ -140,3 +140,11 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+-- ============================================================
+-- Utilisateur MySQL dédié à l'application
+-- Droits limités aux opérations CRUD sur Restaurant_manager
+-- ============================================================
+CREATE USER IF NOT EXISTS 'restaurant_app'@'localhost' IDENTIFIED BY 'RestoApp2026!';
+GRANT SELECT, INSERT, UPDATE, DELETE ON Restaurant_manager.* TO 'restaurant_app'@'localhost';
+FLUSH PRIVILEGES;
