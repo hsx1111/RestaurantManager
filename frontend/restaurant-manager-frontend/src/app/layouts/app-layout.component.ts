@@ -1,14 +1,22 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
     <header class="barre">
       <span class="logo">🍽️ Restaurant Manager</span>
+
+      @if (utilisateur()?.role === 'Gestionnaire') {
+        <nav class="nav">
+          <a routerLink="/categories" routerLinkActive="actif">Catégories</a>
+          <a routerLink="/plats" routerLinkActive="actif">Plats</a>
+        </nav>
+      }
+
       <div class="droite">
         @if (utilisateur(); as u) {
           <span class="user">
@@ -37,6 +45,24 @@ import { AuthService } from '../services/auth.service';
       }
       .logo {
         font-weight: 700;
+      }
+      .nav {
+        display: flex;
+        gap: 1.25rem;
+      }
+      .nav a {
+        color: var(--gris-clair);
+        text-decoration: none;
+        font-size: 0.9rem;
+        padding: 0.25rem 0;
+        border-bottom: 2px solid transparent;
+      }
+      .nav a:hover {
+        color: var(--blanc);
+      }
+      .nav a.actif {
+        color: var(--blanc);
+        border-bottom-color: var(--blanc);
       }
       .droite {
         display: flex;
