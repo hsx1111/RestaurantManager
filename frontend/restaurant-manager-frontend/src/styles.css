@@ -1,1 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
+/* Styles globaux + variables de couleurs (monochrome + pastilles) */
+:root {
+  --noir: #1a1a1a;
+  --gris-fonce: #2b2b2b;
+  --gris: #8a8a8a;
+  --gris-clair: #e2e2e2;
+  --gris-tres-clair: #f4f4f4;
+  --blanc: #ffffff;
+
+  /* Pastilles colorées */
+  --vert: #1b7f3b;
+  --rouge: #b00020;
+  --orange: #c8770a;
+  --bleu: #1565c0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--gris-tres-clair);
+  color: var(--noir);
+}
