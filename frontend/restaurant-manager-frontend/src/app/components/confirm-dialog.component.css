@@ -1,0 +1,28 @@
+h3 {
+  margin: 0 0 0.75rem;
+}
+.message {
+  margin: 0 0 1.5rem;
+  color: var(--gris-fonce);
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+button {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border: 1px solid var(--gris-clair);
+}
+.btn-secondaire {
+  background: var(--blanc);
+  color: var(--noir);
+}
+.btn-confirmer {
+  border: none;
+  color: var(--blanc);
+  font-weight: 600;
+}

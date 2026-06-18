@@ -1,0 +1,53 @@
+<section class="page">
+  <div class="entete">
+    <h1>Catégories</h1>
+    <button type="button" class="ajouter" (click)="ajouter()">+ Ajouter</button>
+  </div>
+
+  @if (erreur()) {
+    <p class="banniere-erreur">{{ erreur() }}</p>
+  }
+
+  <table class="tableau">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th class="col-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (categorie of categories(); track categorie.idCategorie) {
+        <tr>
+          <td>{{ categorie.nomCategorie }}</td>
+          <td class="col-actions">
+            <button type="button" class="icone" title="Modifier" (click)="editer(categorie)">✏️</button>
+            <button type="button" class="icone" title="Supprimer" (click)="demanderSuppression(categorie)">🗑️</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="2" class="vide">Aucune catégorie.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+@if (formOuvert()) {
+  <app-categorie-form
+    [categorie]="categorieEnEdition()"
+    (enregistrer)="enregistrer($event)"
+    (annuler)="fermerForm()"
+  />
+}
+
+@if (confirmOuvert()) {
+  <app-confirm-dialog
+    titre="Supprimer la catégorie"
+    [message]="'Supprimer « ' + (categorieASupprimer()?.nomCategorie ?? '') + ' » ?'"
+    libelleConfirmer="Supprimer"
+    couleur="rouge"
+    (confirmer)="confirmerSuppression()"
+    (annuler)="fermerConfirm()"
+  />
+}

@@ -1,0 +1,24 @@
+.entete { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+h1 { margin: 0; font-size: 1.3rem; }
+.retour { background: transparent; border: none; color: var(--bleu); cursor: pointer; font-size: 0.9rem; }
+.banniere-erreur { background: #fdecef; color: var(--rouge); border: 1px solid var(--rouge); padding: 0.6rem 0.9rem; border-radius: 8px; font-weight: 600; }
+.zone { display: grid; grid-template-columns: 1fr 320px; gap: 1.25rem; align-items: start; }
+.menu { background: var(--blanc); border: 1px solid var(--gris-clair); border-radius: 12px; padding: 1rem; }
+.cats { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+.cat { padding: 0.4rem 0.9rem; border-radius: 999px; border: 1px solid var(--gris-clair); background: var(--gris-tres-clair); cursor: pointer; font-size: 0.9rem; }
+.cat.actif { background: var(--noir); color: var(--blanc); border-color: var(--noir); }
+.plats { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.6rem; }
+.plat { display: flex; flex-direction: column; gap: 0.3rem; align-items: flex-start; padding: 0.7rem; border: 1px solid var(--gris-clair); border-radius: 10px; background: var(--gris-tres-clair); cursor: pointer; text-align: left; }
+.plat:hover { background: var(--gris-clair); }
+.plat .prix { color: var(--gris-fonce); font-size: 0.85rem; }
+.panier { background: var(--blanc); border: 1px solid var(--gris-clair); border-radius: 12px; padding: 1rem; position: sticky; top: 1rem; }
+.panier h2 { margin: 0 0 0.75rem; font-size: 1.05rem; }
+.lignes { list-style: none; margin: 0 0 0.75rem; padding: 0; }
+.lignes li { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 0.5rem; padding: 0.4rem 0; border-bottom: 1px solid var(--gris-clair); }
+.nom { font-size: 0.9rem; }
+.qte { display: flex; align-items: center; gap: 0.4rem; }
+.qte button { width: 24px; height: 24px; border-radius: 6px; border: 1px solid var(--gris-clair); background: var(--gris-tres-clair); cursor: pointer; }
+.sous-total { font-size: 0.85rem; white-space: nowrap; min-width: 60px; text-align: right; }
+.total { display: flex; justify-content: space-between; font-weight: 700; margin: 0.5rem 0 1rem; }
+.valider { width: 100%; padding: 0.6rem; border: none; border-radius: 8px; background: var(--vert); color: var(--blanc); font-weight: 600; cursor: pointer; }
+.vide { color: var(--gris); font-size: 0.9rem; }

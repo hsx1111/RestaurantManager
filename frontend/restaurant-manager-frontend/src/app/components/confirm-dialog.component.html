@@ -1,0 +1,12 @@
+<div class="overlay" (click)="annuler.emit()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>{{ titre() }}</h3>
+    <p class="message">{{ message() }}</p>
+    <div class="actions">
+      <button type="button" class="btn-secondaire" (click)="annuler.emit()">Annuler</button>
+      <button type="button" class="btn-confirmer" [style.background]="couleurCss()" (click)="confirmer.emit()">
+        {{ libelleConfirmer() }}
+      </button>
+    </div>
+  </div>
+</div>

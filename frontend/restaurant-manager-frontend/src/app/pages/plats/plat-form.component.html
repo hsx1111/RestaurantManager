@@ -1,0 +1,38 @@
+<div class="overlay" (click)="annuler.emit()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>{{ titre() }}</h3>
+
+    <form [formGroup]="form" (ngSubmit)="valider()">
+      <label for="nom">Nom</label>
+      <input id="nom" type="text" formControlName="nom" />
+      @if (form.controls.nom.touched && form.controls.nom.invalid) {
+        <p class="erreur-champ">Le nom est requis (2 caractères minimum).</p>
+      }
+
+      <label for="description">Description</label>
+      <input id="description" type="text" formControlName="description" />
+
+      <label for="prix">Prix (€)</label>
+      <input id="prix" type="number" step="0.01" formControlName="prix" />
+      @if (form.controls.prix.touched && form.controls.prix.invalid) {
+        <p class="erreur-champ">Le prix doit être un nombre positif.</p>
+      }
+
+      <label for="idCategorie">Catégorie</label>
+      <select id="idCategorie" formControlName="idCategorie">
+        <option [ngValue]="null" disabled>— Choisir —</option>
+        @for (categorie of categories(); track categorie.idCategorie) {
+          <option [ngValue]="categorie.idCategorie">{{ categorie.nomCategorie }}</option>
+        }
+      </select>
+      @if (form.controls.idCategorie.touched && form.controls.idCategorie.invalid) {
+        <p class="erreur-champ">La catégorie est requise.</p>
+      }
+
+      <div class="actions">
+        <button type="button" class="btn-secondaire" (click)="annuler.emit()">Annuler</button>
+        <button type="submit" class="btn-ok" [disabled]="form.invalid">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>

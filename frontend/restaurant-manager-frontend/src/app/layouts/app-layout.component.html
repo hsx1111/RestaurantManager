@@ -1,0 +1,24 @@
+<header class="barre">
+  <span class="logo">🍽️ Restaurant Manager</span>
+
+  @if (utilisateur()?.role === 'Gestionnaire') {
+    <nav class="nav">
+      <a routerLink="/categories" routerLinkActive="actif">Catégories</a>
+      <a routerLink="/plats" routerLinkActive="actif">Plats</a>
+    </nav>
+  }
+
+  <div class="droite">
+    @if (utilisateur(); as u) {
+      <span class="user">
+        {{ u.prenom }} {{ u.nom }}
+        <span class="role">{{ u.role }}</span>
+      </span>
+    }
+    <button type="button" class="deconnexion" (click)="deconnexion()">Déconnexion</button>
+  </div>
+</header>
+
+<main class="contenu">
+  <router-outlet />
+</main>

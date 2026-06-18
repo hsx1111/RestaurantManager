@@ -1,0 +1,75 @@
+<section class="commande">
+  <div class="entete">
+    <h1>Commande — Table {{ idTable }}</h1>
+    <button type="button" class="retour" (click)="annuler()">← Retour au plan</button>
+  </div>
+
+  @if (erreur()) {
+    <p class="banniere-erreur">{{ erreur() }}</p>
+  }
+
+  <div class="zone">
+    <div class="menu">
+      <div class="cats">
+        @for (categorie of categories(); track categorie.idCategorie) {
+          <button
+            type="button"
+            class="cat"
+            [class.actif]="categorie.idCategorie === categorieSelection()"
+            (click)="categorieSelection.set(categorie.idCategorie)"
+          >
+            {{ categorie.nomCategorie }}
+          </button>
+        }
+      </div>
+
+      <div class="plats">
+        @for (plat of platsAffiches(); track plat.id) {
+          <button type="button" class="plat" (click)="ajouter(plat)">
+            <span>{{ plat.nom }}</span>
+            <span class="prix">{{ plat.prix.toFixed(2) }} €</span>
+          </button>
+        } @empty {
+          <p class="vide">Aucun plat dans cette catégorie.</p>
+        }
+      </div>
+    </div>
+
+    <aside class="panier">
+      <h2>Panier</h2>
+      @if (panier().length === 0) {
+        <p class="vide">Panier vide. Choisissez des plats.</p>
+      } @else {
+        <ul class="lignes">
+          @for (ligne of panier(); track ligne.plat.id) {
+            <li>
+              <span class="nom">{{ ligne.plat.nom }}</span>
+              <span class="qte">
+                <button type="button" (click)="retirer(ligne.plat)">−</button>
+                <span>{{ ligne.quantite }}</span>
+                <button type="button" (click)="ajouter(ligne.plat)">+</button>
+              </span>
+              <span class="sous-total">{{ (ligne.plat.prix * ligne.quantite).toFixed(2) }} €</span>
+            </li>
+          }
+        </ul>
+        <div class="total">
+          <span>Total</span>
+          <span>{{ total().toFixed(2) }} €</span>
+        </div>
+        <button type="button" class="valider" (click)="confirmOuvert.set(true)">Valider la commande</button>
+      }
+    </aside>
+  </div>
+</section>
+
+@if (confirmOuvert()) {
+  <app-confirm-dialog
+    titre="Valider la commande"
+    [message]="'Confirmer ' + nbArticles() + ' article(s) pour ' + total().toFixed(2) + ' € ?'"
+    libelleConfirmer="Valider"
+    couleur="vert"
+    (confirmer)="valider()"
+    (annuler)="confirmOuvert.set(false)"
+  />
+}

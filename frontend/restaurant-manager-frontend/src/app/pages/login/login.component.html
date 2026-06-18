@@ -1,0 +1,27 @@
+<div class="login">
+  <div class="card">
+    <h1>Restaurant Manager</h1>
+    <p class="sous-titre">Entrez votre code PIN</p>
+
+    <div class="ronds">
+      @for (i of positions; track i) {
+        <span class="rond" [class.rempli]="i < pin().length"></span>
+      }
+    </div>
+
+    @if (erreur()) {
+      <p class="erreur">{{ erreur() }}</p>
+    }
+
+    <div class="pave">
+      @for (touche of touches; track touche) {
+        <button type="button" class="touche" [disabled]="chargement()" (click)="ajouter(touche)">
+          {{ touche }}
+        </button>
+      }
+      <span class="vide"></span>
+      <button type="button" class="touche" [disabled]="chargement()" (click)="ajouter('0')">0</button>
+      <button type="button" class="touche effacer" [disabled]="chargement()" (click)="effacer()">⌫</button>
+    </div>
+  </div>
+</div>

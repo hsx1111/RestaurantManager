@@ -1,0 +1,26 @@
+<section class="page">
+  <h1>Plan de salle</h1>
+
+  @if (toast.message()) {
+    <div class="toast">{{ toast.message() }}</div>
+  }
+  @if (info()) {
+    <div class="info">{{ info() }}</div>
+  }
+
+  <div class="grille">
+    @for (table of tables(); track table.id) {
+      <button
+        type="button"
+        class="carte"
+        [class.libre]="table.estLibre"
+        [class.occupee]="!table.estLibre"
+        (click)="ouvrir(table)"
+      >
+        <span class="numero">Table {{ table.id }}</span>
+        <span class="capacite">{{ table.nombrePlace }} places</span>
+        <span class="statut">{{ table.estLibre ? 'Libre' : 'Occupée' }}</span>
+      </button>
+    }
+  </div>
+</section>

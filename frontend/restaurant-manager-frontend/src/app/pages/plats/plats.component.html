@@ -1,0 +1,75 @@
+<section class="page">
+  <div class="entete">
+    <h1>Plats</h1>
+    <button type="button" class="ajouter" (click)="ajouter()">+ Ajouter un plat</button>
+  </div>
+
+  <div class="filtres">
+    <input
+      type="search"
+      placeholder="Rechercher un plat…"
+      [value]="recherche()"
+      (input)="recherche.set($any($event.target).value)"
+    />
+    <select [value]="filtreCategorie() ?? ''" (change)="majFiltre($any($event.target).value)">
+      <option value="">Toutes les catégories</option>
+      @for (categorie of categories(); track categorie.idCategorie) {
+        <option [value]="categorie.idCategorie">{{ categorie.nomCategorie }}</option>
+      }
+    </select>
+  </div>
+
+  @if (erreur()) {
+    <p class="banniere-erreur">{{ erreur() }}</p>
+  }
+
+  <table class="tableau">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Catégorie</th>
+        <th>Description</th>
+        <th class="col-prix">Prix</th>
+        <th class="col-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (plat of platsFiltres(); track plat.id) {
+        <tr>
+          <td>{{ plat.nom }}</td>
+          <td>{{ plat.nomCategorie }}</td>
+          <td class="desc">{{ plat.description || '—' }}</td>
+          <td class="col-prix">{{ plat.prix.toFixed(2) }} €</td>
+          <td class="col-actions">
+            <button type="button" class="icone" title="Modifier" (click)="editer(plat)">✏️</button>
+            <button type="button" class="icone" title="Supprimer" (click)="demanderSuppression(plat)">🗑️</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" class="vide">Aucun plat.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+@if (formOuvert()) {
+  <app-plat-form
+    [plat]="platEnEdition()"
+    [categories]="categories()"
+    (enregistrer)="enregistrer($event)"
+    (annuler)="fermerForm()"
+  />
+}
+
+@if (confirmOuvert()) {
+  <app-confirm-dialog
+    titre="Supprimer le plat"
+    [message]="'Supprimer « ' + (platASupprimer()?.nom ?? '') + ' » ?'"
+    libelleConfirmer="Supprimer"
+    couleur="rouge"
+    (confirmer)="confirmerSuppression()"
+    (annuler)="fermerConfirm()"
+  />
+}

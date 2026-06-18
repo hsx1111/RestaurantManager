@@ -1,0 +1,62 @@
+.barre {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  height: 56px;
+  background: var(--noir);
+  color: var(--blanc);
+}
+.logo {
+  font-weight: 700;
+}
+.nav {
+  display: flex;
+  gap: 1.25rem;
+}
+.nav a {
+  color: var(--gris-clair);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+}
+.nav a:hover {
+  color: var(--blanc);
+}
+.nav a.actif {
+  color: var(--blanc);
+  border-bottom-color: var(--blanc);
+}
+.droite {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.user {
+  font-size: 0.9rem;
+}
+.role {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--bleu);
+  font-size: 0.75rem;
+}
+.deconnexion {
+  background: transparent;
+  border: 1px solid var(--gris);
+  color: var(--blanc);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.deconnexion:hover {
+  background: var(--gris-fonce);
+}
+.contenu {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}

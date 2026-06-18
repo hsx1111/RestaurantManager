@@ -1,0 +1,43 @@
+<section class="page">
+  <h1>Cuisine — Tickets en cours</h1>
+
+  @if (ticketsAffiches().length === 0) {
+    <p class="vide">Aucun ticket en cours.</p>
+  } @else {
+    <div class="grille">
+      @for (ticket of ticketsAffiches(); track ticket.idCommande) {
+        <div class="ticket" [class.retard]="ticket.enRetard">
+          <div class="ticket-entete">
+            <span class="table">Table {{ ticket.numeroTable }}</span>
+            <span class="chrono" [class.rouge]="ticket.enRetard">{{ ticket.minutes }} min</span>
+          </div>
+          <div class="meta">
+            <span>{{ ticket.nomServeur }}</span>
+            <span>Envoyé à {{ formatHeure(ticket.dateEnvoi) }}</span>
+          </div>
+
+          <ul class="lignes">
+            @for (ligne of ticket.lignes; track ligne.idDetail) {
+              <li [class.preparee]="ligne.prepare">
+                <label>
+                  <input
+                    type="checkbox"
+                    [checked]="ligne.prepare"
+                    [disabled]="ligne.prepare"
+                    (change)="marquerLigne(ticket, ligne)"
+                  />
+                  <span class="qte">{{ ligne.quantite }}×</span>
+                  <span class="nom">{{ ligne.nomPlat }}</span>
+                </label>
+              </li>
+            }
+          </ul>
+
+          <button type="button" class="pret" [disabled]="!ticket.toutesPretes" (click)="marquerPret(ticket)">
+            Ticket prêt
+          </button>
+        </div>
+      }
+    </div>
+  }
+</section>
