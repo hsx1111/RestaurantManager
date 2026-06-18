@@ -20,7 +20,7 @@ export const routes: Routes = [
       { path: 'plats', component: PlatsComponent, canActivate: [roleGuard('Gestionnaire')] },
       { path: 'plan-salle', component: PlanSalleComponent },
       { path: 'commande/nouvelle/:idTable', component: CommandeFormComponent },
-      { path: 'cuisine', component: CuisineComponent }
+      { path: 'cuisine', component: CuisineComponent, canActivate: [roleGuard('Cuisine', 'Gestionnaire')] }
     ]
   },
   { path: '**', redirectTo: 'login' }

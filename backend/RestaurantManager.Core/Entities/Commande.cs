@@ -10,5 +10,6 @@ public class Commande
     public int IdTable { get; set; }
     public StatutCommande Statut { get; set; }
     public TypeService TypeService { get; set; }
+    public DateTime DateCommande { get; set; }
     public string? Notes { get; set; }
 }

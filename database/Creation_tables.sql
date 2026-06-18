@@ -50,6 +50,7 @@ CREATE TABLE commande (
     IdTable INT NOT NULL,
     Statut ENUM('EnCours', 'Servie', 'Facturee', 'Annulee') NOT NULL DEFAULT 'EnCours',
     TypeService ENUM('Salle', 'AEmporter', 'Livraison') NOT NULL,
+    DateCommande DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     Notes VARCHAR(500) NULL,
     CONSTRAINT fk_commande_utilisateur FOREIGN KEY (IdUtilisateur) REFERENCES utilisateur (IdUtilisateur),
     CONSTRAINT fk_commande_client FOREIGN KEY (IdClient) REFERENCES client (IdClient),

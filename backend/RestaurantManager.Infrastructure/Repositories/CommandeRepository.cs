@@ -95,4 +95,51 @@ public class CommandeRepository : ICommandeRepository
 
         return commande;
     }
+
+    public List<TicketCuisineDto> GetTicketsEnCours()
+    {
+        using var connection = new MySqlConnection(_connectionString);
+
+        const string sql = @"SELECT c.IdCommande AS IdCommande, c.IdTable AS NumeroTable,
+                                    CONCAT(u.Prenom, ' ', u.Nom) AS NomServeur, c.DateCommande AS DateEnvoi,
+                                    d.IdDetailCommande AS IdDetail, p.NomPlat AS NomPlat,
+                                    d.Quantite AS Quantite, d.Prepare AS Prepare
+                             FROM commande c
+                             INNER JOIN utilisateur u ON u.IdUtilisateur = c.IdUtilisateur
+                             INNER JOIN detailcommande d ON d.IdCommande = c.IdCommande
+                             INNER JOIN plat p ON p.IdPlat = d.IdPlat
+                             WHERE c.Statut = 'EnCours'
+                             ORDER BY c.DateCommande";
+
+        var tickets = new Dictionary<int, TicketCuisineDto>();
+        connection.Query<TicketCuisineDto, LigneTicketDto, TicketCuisineDto>(
+            sql,
+            (ticket, ligne) =>
+            {
+                if (!tickets.TryGetValue(ticket.IdCommande, out var existant))
+                {
+                    existant = ticket;
+                    tickets.Add(existant.IdCommande, existant);
+                }
+                existant.Lignes.Add(ligne);
+                return existant;
+            },
+            splitOn: "IdDetail");
+
+        return tickets.Values.ToList();
+    }
+
+    public void MarquerLignePrete(int idDetail)
+    {
+        using var connection = new MySqlConnection(_connectionString);
+        connection.Execute("UPDATE detailcommande SET Prepare = true WHERE IdDetailCommande = @IdDetail",
+            new { IdDetail = idDetail });
+    }
+
+    public void MarquerCommandeServie(int idCommande)
+    {
+        using var connection = new MySqlConnection(_connectionString);
+        connection.Execute("UPDATE commande SET Statut = 'Servie' WHERE IdCommande = @IdCommande",
+            new { IdCommande = idCommande });
+    }
 }
