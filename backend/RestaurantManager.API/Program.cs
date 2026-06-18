@@ -53,11 +53,10 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    var seeder = new DataSeeder(app.Configuration);
-    seeder.Seed();
-}
+// Seed idempotent : ne s'exécute que sur une base vide
+// Volontairement hors de IsDevelopment() pour garantir les comptes de démo
+var seeder = new DataSeeder(app.Configuration);
+seeder.Seed();
 
 app.UseCors("AllowAngular");
 app.UseAuthentication();
