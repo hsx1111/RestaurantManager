@@ -1,24 +1,26 @@
-<header class="barre">
-  <span class="logo">🍽️ Restaurant Manager</span>
+<div class="app">
+  <header class="topbar">
+    <span class="logo">🍽️ Restaurant Manager</span>
+    <div class="droite">
+      @if (utilisateur(); as u) {
+        <span class="user">
+          {{ u.prenom }} {{ u.nom }}
+          <span class="role">{{ u.role }}</span>
+        </span>
+      }
+      <button type="button" class="deconnexion" (click)="deconnexion()">Déconnexion</button>
+    </div>
+  </header>
 
-  @if (utilisateur()?.role === 'Gestionnaire') {
-    <nav class="nav">
-      <a routerLink="/categories" routerLinkActive="actif">Catégories</a>
-      <a routerLink="/plats" routerLinkActive="actif">Plats</a>
+  <div class="corps">
+    <nav class="sidebar">
+      @for (lien of liensVisibles(); track lien.route) {
+        <a [routerLink]="lien.route" routerLinkActive="actif">{{ lien.label }}</a>
+      }
     </nav>
-  }
 
-  <div class="droite">
-    @if (utilisateur(); as u) {
-      <span class="user">
-        {{ u.prenom }} {{ u.nom }}
-        <span class="role">{{ u.role }}</span>
-      </span>
-    }
-    <button type="button" class="deconnexion" (click)="deconnexion()">Déconnexion</button>
+    <main class="contenu">
+      <router-outlet />
+    </main>
   </div>
-</header>
-
-<main class="contenu">
-  <router-outlet />
-</main>
+</div>
