@@ -1,0 +1,14 @@
+.entete { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+h1 { margin: 0; font-size: 1.4rem; }
+.ajouter { background: var(--vert); color: var(--blanc); border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.banniere-erreur { background: #fdecef; color: var(--rouge); border: 1px solid var(--rouge); padding: 0.6rem 0.9rem; border-radius: 8px; font-weight: 600; }
+.tableau { width: 100%; border-collapse: collapse; background: var(--blanc); border: 1px solid var(--gris-clair); border-radius: 10px; overflow: hidden; }
+th, td { text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid var(--gris-clair); }
+thead th { background: var(--gris-tres-clair); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--gris); }
+tbody tr:last-child td { border-bottom: none; }
+.statut { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+.statut.libre { background: #e6f4ec; color: var(--vert); }
+.statut.occupee { background: #fdecef; color: var(--rouge); }
+.col-actions { width: 110px; text-align: right; }
+.icone { background: transparent; border: none; cursor: pointer; font-size: 1.1rem; padding: 0.2rem 0.4rem; }
+.vide { text-align: center; color: var(--gris); }

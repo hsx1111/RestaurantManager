@@ -1,0 +1,16 @@
+h3 { margin: 0 0 1rem; }
+label { display: block; font-size: 0.85rem; color: var(--gris); margin: 0.6rem 0 0.25rem; }
+input {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--gris-clair);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+input:focus { outline: 2px solid var(--bleu); border-color: var(--bleu); }
+.erreur-champ { color: var(--rouge); font-size: 0.8rem; margin: 0.25rem 0 0; }
+.actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem; }
+button { padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; border: 1px solid var(--gris-clair); }
+.btn-secondaire { background: var(--blanc); color: var(--noir); }
+.btn-ok { border: none; background: var(--vert); color: var(--blanc); font-weight: 600; }
+.btn-ok:disabled { background: var(--gris); cursor: default; }

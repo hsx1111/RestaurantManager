@@ -1,0 +1,61 @@
+<section class="page">
+  <div class="entete">
+    <h1>Tables</h1>
+    <button type="button" class="ajouter" (click)="ajouter()">+ Ajouter</button>
+  </div>
+
+  @if (erreur()) {
+    <p class="banniere-erreur">{{ erreur() }}</p>
+  }
+
+  <table class="tableau">
+    <thead>
+      <tr>
+        <th>Table</th>
+        <th>Capacité</th>
+        <th>Statut</th>
+        <th class="col-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (table of tables(); track table.id) {
+        <tr>
+          <td>Table {{ table.id }}</td>
+          <td>{{ table.nombrePlace }} places</td>
+          <td>
+            <span class="statut" [class.libre]="table.estLibre" [class.occupee]="!table.estLibre">
+              {{ table.estLibre ? 'Libre' : 'Occupée' }}
+            </span>
+          </td>
+          <td class="col-actions">
+            <button type="button" class="icone" title="Modifier" (click)="editer(table)">✏️</button>
+            <button type="button" class="icone" title="Supprimer" (click)="demanderSuppression(table)">🗑️</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="4" class="vide">Aucune table.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+@if (formOuvert()) {
+  <app-tables-form
+    [table]="enEdition()"
+    (enregistrer)="enregistrer($event)"
+    (annuler)="fermerForm()"
+  />
+}
+
+@if (confirmOuvert()) {
+  <app-confirm-dialog
+    titre="Supprimer la table"
+    [message]="'Supprimer la table ' + (aSupprimer()?.id ?? '') + ' ?'"
+    libelleConfirmer="Supprimer"
+    couleur="rouge"
+    (confirmer)="confirmerSuppression()"
+    (annuler)="fermerConfirm()"
+  />
+}

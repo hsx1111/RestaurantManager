@@ -3,3 +3,11 @@ export interface Table {
   nombrePlace: number;
   estLibre: boolean;
 }
+
+export interface TableCreate {
+  nombrePlace: number;
+}
+
+export interface TableUpdate {
+  nombrePlace: number;
+}

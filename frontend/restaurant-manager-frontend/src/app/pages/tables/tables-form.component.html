@@ -1,0 +1,18 @@
+<div class="overlay" (click)="annuler.emit()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>{{ titre() }}</h3>
+
+    <form [formGroup]="form" (ngSubmit)="valider()">
+      <label for="nombrePlace">Nombre de places</label>
+      <input id="nombrePlace" type="number" min="1" formControlName="nombrePlace" />
+      @if (form.controls.nombrePlace.touched && form.controls.nombrePlace.invalid) {
+        <p class="erreur-champ">Le nombre de places doit être supérieur à 0.</p>
+      }
+
+      <div class="actions">
+        <button type="button" class="btn-secondaire" (click)="annuler.emit()">Annuler</button>
+        <button type="submit" class="btn-ok" [disabled]="form.invalid">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>
