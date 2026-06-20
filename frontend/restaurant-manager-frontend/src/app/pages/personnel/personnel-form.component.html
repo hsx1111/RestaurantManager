@@ -1,0 +1,37 @@
+<div class="overlay" (click)="annuler.emit()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>{{ titre() }}</h3>
+
+    <form [formGroup]="form" (ngSubmit)="valider()">
+      <label for="nom">Nom</label>
+      <input id="nom" type="text" formControlName="nom" />
+      @if (form.controls.nom.touched && form.controls.nom.invalid) {
+        <p class="erreur-champ">Le nom est requis.</p>
+      }
+
+      <label for="prenom">Prénom</label>
+      <input id="prenom" type="text" formControlName="prenom" />
+      @if (form.controls.prenom.touched && form.controls.prenom.invalid) {
+        <p class="erreur-champ">Le prénom est requis.</p>
+      }
+
+      <label for="pin">Code PIN (4 chiffres){{ modeEdition() ? ' — laisser vide pour ne pas changer' : '' }}</label>
+      <input id="pin" type="text" inputmode="numeric" maxlength="4" formControlName="pin" />
+      @if (form.controls.pin.touched && form.controls.pin.invalid) {
+        <p class="erreur-champ">Le PIN doit comporter exactement 4 chiffres.</p>
+      }
+
+      <label for="role">Rôle</label>
+      <select id="role" formControlName="role">
+        @for (role of roles; track role) {
+          <option [value]="role">{{ role }}</option>
+        }
+      </select>
+
+      <div class="actions">
+        <button type="button" class="btn-secondaire" (click)="annuler.emit()">Annuler</button>
+        <button type="submit" class="btn-ok" [disabled]="form.invalid">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>
