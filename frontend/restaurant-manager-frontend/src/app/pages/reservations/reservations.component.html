@@ -1,0 +1,84 @@
+<section class="page">
+  <div class="entete">
+    <h1>Réservations</h1>
+    <button type="button" class="ajouter" (click)="ajouter()">+ Nouvelle réservation</button>
+  </div>
+
+  @if (erreur()) {
+    <p class="banniere-erreur">{{ erreur() }}</p>
+  }
+
+  <table class="tableau">
+    <thead>
+      <tr>
+        <th>Client</th>
+        <th>Table</th>
+        <th>Pers.</th>
+        <th>Début</th>
+        <th>Fin</th>
+        <th>Statut</th>
+        <th class="col-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (reservation of reservations(); track reservation.id) {
+        <tr>
+          <td>{{ reservation.nomClient }}</td>
+          <td>Table {{ reservation.numeroTable }}</td>
+          <td>{{ reservation.nombrePersonne }}</td>
+          <td>{{ formatDate(reservation.dateHeureDebut) }}</td>
+          <td>{{ formatDate(reservation.dateHeureFin) }}</td>
+          <td>
+            @switch (reservation.statut) {
+              @case ('EnAttente') {
+                <span class="badge attente">En attente</span>
+              }
+              @case ('Confirmee') {
+                <span class="badge confirmee">Confirmée</span>
+              }
+              @case ('Honoree') {
+                <span class="badge honoree">Honorée</span>
+              }
+              @case ('Annulee') {
+                <span class="badge annulee">Annulée</span>
+              }
+            }
+          </td>
+          <td class="col-actions">
+            @if (reservation.statut === 'EnAttente') {
+              <button type="button" class="lien confirmer" (click)="confirmer(reservation)">Confirmer</button>
+            }
+            @if (reservation.statut !== 'Annulee') {
+              <button type="button" class="lien annuler" (click)="annulerReservation(reservation)">Annuler</button>
+            }
+            <button type="button" class="icone" title="Supprimer" (click)="demanderSuppression(reservation)">🗑️</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7" class="vide">Aucune réservation.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+@if (formOuvert()) {
+  <app-reservation-form
+    [clients]="clients()"
+    [tables]="tables()"
+    (enregistrer)="enregistrer($event)"
+    (annuler)="fermerForm()"
+  />
+}
+
+@if (confirmOuvert()) {
+  <app-confirm-dialog
+    titre="Supprimer la réservation"
+    [message]="'Supprimer la réservation de ' + (aSupprimer()?.nomClient ?? '') + ' ?'"
+    libelleConfirmer="Supprimer"
+    couleur="rouge"
+    (confirmer)="confirmerSuppression()"
+    (annuler)="fermerConfirm()"
+  />
+}

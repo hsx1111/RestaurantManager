@@ -15,6 +15,8 @@ public static class ServiceCollectionExtension
         services.AddScoped<ICuisineUseCases, CuisineUseCases>();
         services.AddScoped<ITableUseCases, TableUseCases>();
         services.AddScoped<IUtilisateurUseCases, UtilisateurUseCases>();
+        services.AddScoped<IClientUseCases, ClientUseCases>();
+        services.AddScoped<IReservationUseCases, ReservationUseCases>();
         return services;
     }
 }

@@ -61,13 +61,11 @@ public class DataSeeder
         const string sql = @"INSERT INTO client (Nom, Prenom, Telephone, Email, DateInscription)
                              VALUES (@Nom, @Prenom, @Telephone, @Email, @DateInscription)";
 
-        connection.Execute(sql, new
+        connection.Execute(sql, new[]
         {
-            Nom = "Dupont",
-            Prenom = "Jean",
-            Telephone = (string?)null,
-            Email = (string?)null,
-            DateInscription = DateTime.Now
+            new { Nom = "Dupont", Prenom = "Jean", Telephone = (string?)null, Email = (string?)null, DateInscription = DateTime.Now },
+            new { Nom = "Martin", Prenom = "Sophie", Telephone = (string?)null, Email = (string?)null, DateInscription = DateTime.Now },
+            new { Nom = "Durand", Prenom = "Paul", Telephone = (string?)null, Email = (string?)null, DateInscription = DateTime.Now }
         }, transaction);
     }
 

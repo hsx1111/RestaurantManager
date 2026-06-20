@@ -1,0 +1,40 @@
+<div class="overlay" (click)="annuler.emit()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>Nouvelle réservation</h3>
+
+    <form [formGroup]="form" (ngSubmit)="valider()">
+      <label for="idClient">Client</label>
+      <select id="idClient" formControlName="idClient">
+        <option [ngValue]="null" disabled>— Choisir —</option>
+        @for (client of clients(); track client.id) {
+          <option [ngValue]="client.id">{{ client.prenom }} {{ client.nom }}</option>
+        }
+      </select>
+
+      <label for="idTable">Table</label>
+      <select id="idTable" formControlName="idTable">
+        <option [ngValue]="null" disabled>— Choisir —</option>
+        @for (table of tables(); track table.id) {
+          <option [ngValue]="table.id">Table {{ table.id }} ({{ table.nombrePlace }} places)</option>
+        }
+      </select>
+
+      <label for="nombrePersonne">Nombre de personnes</label>
+      <input id="nombrePersonne" type="number" min="1" formControlName="nombrePersonne" />
+
+      <label for="debut">Début</label>
+      <input id="debut" type="datetime-local" formControlName="dateHeureDebut" />
+
+      <label for="fin">Fin</label>
+      <input id="fin" type="datetime-local" formControlName="dateHeureFin" />
+
+      <label for="notes">Notes</label>
+      <input id="notes" type="text" formControlName="notes" />
+
+      <div class="actions">
+        <button type="button" class="btn-secondaire" (click)="annuler.emit()">Annuler</button>
+        <button type="submit" class="btn-ok" [disabled]="form.invalid">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>
