@@ -1,0 +1,58 @@
+<section class="detail">
+  <div class="entete">
+    <h1>Table {{ idTable }}</h1>
+    <button type="button" class="retour" (click)="annuler()">← Retour au plan</button>
+  </div>
+
+  @if (erreur()) {
+    <p class="banniere-erreur">{{ erreur() }}</p>
+  }
+
+  @if (commande(); as cmd) {
+    <div class="grille">
+      <div class="recap">
+        <h2>Commande en cours</h2>
+        <ul class="lignes">
+          @for (ligne of cmd.lignes; track ligne.idPlat) {
+            <li>
+              <span>{{ ligne.quantite }}× {{ ligne.nomPlat }}</span>
+              <span>{{ (ligne.prixUnitaire * ligne.quantite).toFixed(2) }} €</span>
+            </li>
+          }
+        </ul>
+        <div class="total">
+          <span>Total</span>
+          <span>{{ cmd.total.toFixed(2) }} €</span>
+        </div>
+
+        <div class="cloture">
+          <label for="mode">Mode de paiement</label>
+          <select id="mode" [value]="modePaiement()" (change)="modePaiement.set($any($event.target).value)">
+            @for (mode of modes; track mode) {
+              <option [value]="mode">{{ mode }}</option>
+            }
+          </select>
+          <button type="button" class="encaisser" (click)="confirmOuvert.set(true)">
+            Encaisser et libérer la table
+          </button>
+        </div>
+      </div>
+
+      <div class="ajout">
+        <h2>Ajouter des plats</h2>
+        <app-menu-panier libelleValider="Ajouter à la commande" (valider)="onAjouter($event)" />
+      </div>
+    </div>
+  }
+</section>
+
+@if (confirmOuvert()) {
+  <app-confirm-dialog
+    titre="Clôturer la table"
+    [message]="'Encaisser ' + (commande()?.total ?? 0).toFixed(2) + ' € en ' + modePaiement() + ' et libérer la table ?'"
+    libelleConfirmer="Encaisser"
+    couleur="vert"
+    (confirmer)="cloturer()"
+    (annuler)="confirmOuvert.set(false)"
+  />
+}

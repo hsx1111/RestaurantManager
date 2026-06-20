@@ -1,4 +1,5 @@
 using RestaurantManager.Core.DTOs;
+using RestaurantManager.Core.Enums;
 using RestaurantManager.Core.Interfaces;
 using RestaurantManager.Core.UseCases.Abstractions;
 
@@ -27,5 +28,31 @@ public class CommandeUseCases : ICommandeUseCases
     public CommandeDetailDto? GetById(int id)
     {
         return _commandeRepository.GetById(id);
+    }
+
+    public CommandeDetailDto? GetEnCoursParTable(int idTable)
+    {
+        return _commandeRepository.GetCommandeEnCoursParTable(idTable);
+    }
+
+    public CommandeDetailDto AjouterLignes(int idCommande, List<LigneCreateDto> lignes)
+    {
+        if (lignes.Count == 0)
+        {
+            throw new ArgumentException("Aucun plat à ajouter.");
+        }
+
+        _commandeRepository.AjouterLignes(idCommande, lignes);
+        return _commandeRepository.GetById(idCommande)!;
+    }
+
+    public FactureDto Cloturer(int idCommande, string modePaiement)
+    {
+        if (!Enum.TryParse<ModePaiement>(modePaiement, out _))
+        {
+            throw new ArgumentException("Mode de paiement invalide.");
+        }
+
+        return _commandeRepository.Cloturer(idCommande, modePaiement);
     }
 }

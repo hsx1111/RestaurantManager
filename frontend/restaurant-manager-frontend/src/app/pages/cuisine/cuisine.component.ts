@@ -49,7 +49,10 @@ export class CuisineComponent implements OnInit, OnDestroy {
 
   private refresh(): void {
     this.cuisineService.getTickets().subscribe({
-      next: (liste) => this.tickets.set(liste)
+      next: (liste) => this.tickets.set(liste),
+      error: () => {
+        // Erreur transitoire de polling : on garde les derniers tickets connus.
+      }
     });
   }
 

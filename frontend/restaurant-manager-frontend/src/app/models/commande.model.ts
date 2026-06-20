@@ -1,3 +1,5 @@
+import { Plat } from './plat.model';
+
 export interface LigneCreate {
   idPlat: number;
   quantite: number;
@@ -22,4 +24,17 @@ export interface CommandeDetail {
   nomServeur: string;
   lignes: LigneDetail[];
   total: number;
+}
+
+export interface LignePanier {
+  plat: Plat;
+  quantite: number;
+}
+
+export interface Facture {
+  idFacture: number;
+  idCommande: number;
+  montantTotal: number;
+  modePaiement: string;
+  dateFacture: string;
 }

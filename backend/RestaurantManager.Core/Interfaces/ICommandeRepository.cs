@@ -6,6 +6,9 @@ public interface ICommandeRepository
 {
     int Create(CommandeCreateDto commande, int idUtilisateur);
     CommandeDetailDto? GetById(int id);
+    CommandeDetailDto? GetCommandeEnCoursParTable(int idTable);
+    void AjouterLignes(int idCommande, IEnumerable<LigneCreateDto> lignes);
+    FactureDto Cloturer(int idCommande, string modePaiement);
     List<TicketCuisineDto> GetTicketsEnCours();
     void MarquerLignePrete(int idDetail);
     void MarquerCommandeServie(int idCommande);

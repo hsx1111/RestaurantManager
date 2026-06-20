@@ -29,7 +29,7 @@ export class PlanSalleComponent implements OnInit {
     if (table.estLibre) {
       this.router.navigate(['/commande/nouvelle', table.id]);
     } else {
-      this.info.set('Clôture non implémentée dans cette version');
+      this.router.navigate(['/table', table.id]);
     }
   }
 }

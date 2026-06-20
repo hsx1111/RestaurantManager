@@ -1,0 +1,87 @@
+.entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+h1 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+.retour {
+  background: transparent;
+  border: none;
+  color: var(--bleu);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.banniere-erreur {
+  background: #fdecef;
+  color: var(--rouge);
+  border: 1px solid var(--rouge);
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.grille {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+.recap {
+  background: var(--blanc);
+  border: 1px solid var(--gris-clair);
+  border-radius: 12px;
+  padding: 1rem;
+}
+.recap h2,
+.ajout h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+}
+.lignes {
+  list-style: none;
+  margin: 0 0 0.5rem;
+  padding: 0;
+}
+.lignes li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--gris-clair);
+  font-size: 0.9rem;
+}
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  margin: 0.5rem 0 1rem;
+}
+.cloture {
+  border-top: 1px solid var(--gris-clair);
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.cloture label {
+  font-size: 0.85rem;
+  color: var(--gris);
+}
+.cloture select {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--gris-clair);
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+.encaisser {
+  margin-top: 0.5rem;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--vert);
+  color: var(--blanc);
+  font-weight: 600;
+  cursor: pointer;
+}

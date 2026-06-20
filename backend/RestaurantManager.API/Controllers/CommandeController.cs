@@ -7,7 +7,7 @@ using RestaurantManager.Core.UseCases.Abstractions;
 namespace RestaurantManager.API.Controllers;
 
 [ApiController]
-[Authorize]
+[Authorize(Roles = "Serveur,Gestionnaire")]
 [Route("api/commandes")]
 public class CommandeController : ControllerBase
 {
@@ -31,5 +31,24 @@ public class CommandeController : ControllerBase
     {
         var commande = _commandeUseCases.GetById(id);
         return commande is null ? NotFound() : Ok(commande);
+    }
+
+    [HttpGet("table/{idTable:int}")]
+    public IActionResult GetEnCoursParTable(int idTable)
+    {
+        var commande = _commandeUseCases.GetEnCoursParTable(idTable);
+        return commande is null ? NotFound() : Ok(commande);
+    }
+
+    [HttpPost("{id:int}/lignes")]
+    public IActionResult AjouterLignes(int id, [FromBody] List<LigneCreateDto> lignes)
+    {
+        return Ok(_commandeUseCases.AjouterLignes(id, lignes));
+    }
+
+    [HttpPost("{id:int}/cloturer")]
+    public IActionResult Cloturer(int id, [FromBody] ClotureRequestDto requete)
+    {
+        return Ok(_commandeUseCases.Cloturer(id, requete.ModePaiement));
     }
 }

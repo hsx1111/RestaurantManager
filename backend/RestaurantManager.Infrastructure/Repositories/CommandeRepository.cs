@@ -64,8 +64,6 @@ public class CommandeRepository : ICommandeRepository
 
     public CommandeDetailDto? GetById(int id)
     {
-        using var connection = new MySqlConnection(_connectionString);
-
         const string sql = @"SELECT c.IdCommande AS Id, c.IdTable AS NumeroTable,
                                     CONCAT(u.Prenom, ' ', u.Nom) AS NomServeur,
                                     d.IdPlat AS IdPlat, p.NomPlat AS NomPlat,
@@ -75,6 +73,26 @@ public class CommandeRepository : ICommandeRepository
                              INNER JOIN detailcommande d ON d.IdCommande = c.IdCommande
                              INNER JOIN plat p ON p.IdPlat = d.IdPlat
                              WHERE c.IdCommande = @Id";
+        return ChargerCommande(sql, new { Id = id });
+    }
+
+    public CommandeDetailDto? GetCommandeEnCoursParTable(int idTable)
+    {
+        const string sql = @"SELECT c.IdCommande AS Id, c.IdTable AS NumeroTable,
+                                    CONCAT(u.Prenom, ' ', u.Nom) AS NomServeur,
+                                    d.IdPlat AS IdPlat, p.NomPlat AS NomPlat,
+                                    d.Quantite AS Quantite, d.PrixUnitaire AS PrixUnitaire
+                             FROM commande c
+                             INNER JOIN utilisateur u ON u.IdUtilisateur = c.IdUtilisateur
+                             INNER JOIN detailcommande d ON d.IdCommande = c.IdCommande
+                             INNER JOIN plat p ON p.IdPlat = d.IdPlat
+                             WHERE c.IdTable = @IdTable AND c.Statut = 'EnCours'";
+        return ChargerCommande(sql, new { IdTable = idTable });
+    }
+
+    private CommandeDetailDto? ChargerCommande(string sql, object parametres)
+    {
+        using var connection = new MySqlConnection(_connectionString);
 
         CommandeDetailDto? commande = null;
         connection.Query<CommandeDetailDto, LigneDetailDto, CommandeDetailDto>(
@@ -85,7 +103,7 @@ public class CommandeRepository : ICommandeRepository
                 commande.Lignes.Add(ligne);
                 return commande;
             },
-            new { Id = id },
+            parametres,
             splitOn: "IdPlat");
 
         if (commande is not null)
@@ -94,6 +112,85 @@ public class CommandeRepository : ICommandeRepository
         }
 
         return commande;
+    }
+
+    public void AjouterLignes(int idCommande, IEnumerable<LigneCreateDto> lignes)
+    {
+        using var connection = new MySqlConnection(_connectionString);
+        connection.Open();
+        using var transaction = connection.BeginTransaction();
+        try
+        {
+            const string selectPrix = "SELECT Prix FROM plat WHERE IdPlat = @IdPlat";
+            const string upsert = @"INSERT INTO detailcommande (IdCommande, IdPlat, Quantite, PrixUnitaire)
+                                    VALUES (@IdCommande, @IdPlat, @Quantite, @PrixUnitaire)
+                                    ON DUPLICATE KEY UPDATE Quantite = Quantite + VALUES(Quantite)";
+
+            foreach (var ligne in lignes)
+            {
+                var prixUnitaire = connection.ExecuteScalar<decimal>(selectPrix, new { ligne.IdPlat }, transaction);
+                connection.Execute(upsert, new
+                {
+                    IdCommande = idCommande,
+                    ligne.IdPlat,
+                    ligne.Quantite,
+                    PrixUnitaire = prixUnitaire
+                }, transaction);
+            }
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    public FactureDto Cloturer(int idCommande, string modePaiement)
+    {
+        using var connection = new MySqlConnection(_connectionString);
+        connection.Open();
+        using var transaction = connection.BeginTransaction();
+        try
+        {
+            var total = connection.ExecuteScalar<decimal>(
+                "SELECT COALESCE(SUM(Quantite * PrixUnitaire), 0) FROM detailcommande WHERE IdCommande = @IdCommande",
+                new { IdCommande = idCommande }, transaction);
+
+            const string insertFacture = @"INSERT INTO facture (IdCommande, MontantTotal, ModePaiement, DateFacture)
+                                           VALUES (@IdCommande, @MontantTotal, @ModePaiement, NOW());
+                                           SELECT LAST_INSERT_ID();";
+            var idFacture = connection.ExecuteScalar<int>(insertFacture, new
+            {
+                IdCommande = idCommande,
+                MontantTotal = total,
+                ModePaiement = modePaiement
+            }, transaction);
+
+            connection.Execute("UPDATE commande SET Statut = 'Facturee' WHERE IdCommande = @IdCommande",
+                new { IdCommande = idCommande }, transaction);
+
+            connection.Execute(@"UPDATE restaurant_table SET EstLibre = true
+                                 WHERE IdTable = (SELECT IdTable FROM commande WHERE IdCommande = @IdCommande)",
+                new { IdCommande = idCommande }, transaction);
+
+            transaction.Commit();
+
+            return new FactureDto
+            {
+                IdFacture = idFacture,
+                IdCommande = idCommande,
+                MontantTotal = total,
+                ModePaiement = modePaiement,
+                DateFacture = DateTime.Now
+            };
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
     }
 
     public List<TicketCuisineDto> GetTicketsEnCours()
