@@ -1,7 +1,7 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
-using RestaurantManager.Core.Entities;
+using RestaurantManager.Core.Models;
 using RestaurantManager.Core.Interfaces;
 
 namespace RestaurantManager.Infrastructure.Repositories;

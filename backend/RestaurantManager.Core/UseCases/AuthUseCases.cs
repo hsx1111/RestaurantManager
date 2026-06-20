@@ -1,14 +1,15 @@
 using RestaurantManager.Core.DTOs;
 using RestaurantManager.Core.Exceptions;
 using RestaurantManager.Core.Interfaces;
+using RestaurantManager.Core.UseCases.Abstractions;
 
-namespace RestaurantManager.Core.Services;
+namespace RestaurantManager.Core.UseCases;
 
-public class AuthService : IAuthService
+public class AuthUseCases : IAuthUseCases
 {
     private readonly IUtilisateurRepository _utilisateurRepository;
 
-    public AuthService(IUtilisateurRepository utilisateurRepository)
+    public AuthUseCases(IUtilisateurRepository utilisateurRepository)
     {
         _utilisateurRepository = utilisateurRepository;
     }

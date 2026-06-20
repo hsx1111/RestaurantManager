@@ -2,7 +2,7 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using RestaurantManager.Core.DTOs;
-using RestaurantManager.Core.Entities;
+using RestaurantManager.Core.Models;
 using RestaurantManager.Core.Exceptions;
 using RestaurantManager.Core.Interfaces;
 

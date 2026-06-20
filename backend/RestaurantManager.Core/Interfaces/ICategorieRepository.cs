@@ -1,4 +1,4 @@
-using RestaurantManager.Core.Entities;
+using RestaurantManager.Core.Models;
 
 namespace RestaurantManager.Core.Interfaces;
 

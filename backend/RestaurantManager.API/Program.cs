@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using RestaurantManager.Core.Interfaces;
-using RestaurantManager.Core.Services;
+using RestaurantManager.API.Middleware;
+using RestaurantManager.Core;
 using RestaurantManager.Infrastructure;
-using RestaurantManager.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,16 +18,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddScoped<IUtilisateurRepository, UtilisateurRepository>();
-builder.Services.AddScoped<ICategorieRepository, CategorieRepository>();
-builder.Services.AddScoped<IPlatRepository, PlatRepository>();
-builder.Services.AddScoped<ITableRepository, TableRepository>();
-builder.Services.AddScoped<ICommandeRepository, CommandeRepository>();
-builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
-builder.Services.AddScoped<IFactureRepository, FactureRepository>();
-
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ICategorieService, CategorieService>();
+builder.Services.AddCoreServices();
+builder.Services.AddInfrastructureServices();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -59,6 +50,7 @@ var seeder = new DataSeeder(app.Configuration);
 seeder.Seed();
 
 app.UseCors("AllowAngular");
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RestaurantManager.Core.Entities;
-using RestaurantManager.Core.Exceptions;
-using RestaurantManager.Core.Interfaces;
+using RestaurantManager.Core.Models;
+using RestaurantManager.Core.UseCases.Abstractions;
 
 namespace RestaurantManager.API.Controllers;
 
@@ -11,36 +10,29 @@ namespace RestaurantManager.API.Controllers;
 [Route("api/categories")]
 public class CategorieController : ControllerBase
 {
-    private readonly ICategorieService _categorieService;
+    private readonly ICategorieUseCases _categorieUseCases;
 
-    public CategorieController(ICategorieService categorieService)
+    public CategorieController(ICategorieUseCases categorieUseCases)
     {
-        _categorieService = categorieService;
+        _categorieUseCases = categorieUseCases;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(_categorieService.GetAll());
+        return Ok(_categorieUseCases.GetAll());
     }
 
     [HttpGet("{id:int}")]
     public IActionResult GetById(int id)
     {
-        try
-        {
-            return Ok(_categorieService.GetById(id));
-        }
-        catch (CategorieNotFoundException)
-        {
-            return NotFound();
-        }
+        return Ok(_categorieUseCases.GetById(id));
     }
 
     [HttpPost]
     public IActionResult Create([FromBody] Categorie categorie)
     {
-        var creee = _categorieService.Create(categorie);
+        var creee = _categorieUseCases.Create(categorie);
         return CreatedAtAction(nameof(GetById), new { id = creee.IdCategorie }, creee);
     }
 
@@ -48,32 +40,14 @@ public class CategorieController : ControllerBase
     public IActionResult Update(int id, [FromBody] Categorie categorie)
     {
         categorie.IdCategorie = id;
-        try
-        {
-            _categorieService.Update(categorie);
-            return NoContent();
-        }
-        catch (CategorieNotFoundException)
-        {
-            return NotFound();
-        }
+        _categorieUseCases.Update(categorie);
+        return NoContent();
     }
 
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        try
-        {
-            _categorieService.Delete(id);
-            return NoContent();
-        }
-        catch (CategorieEnUsageException ex)
-        {
-            return Conflict(new { message = ex.Message });
-        }
-        catch (CategorieNotFoundException)
-        {
-            return NotFound();
-        }
+        _categorieUseCases.Delete(id);
+        return NoContent();
     }
 }

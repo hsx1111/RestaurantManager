@@ -2,7 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantManager.Core.DTOs;
-using RestaurantManager.Core.Interfaces;
+using RestaurantManager.Core.UseCases.Abstractions;
 
 namespace RestaurantManager.API.Controllers;
 
@@ -11,25 +11,25 @@ namespace RestaurantManager.API.Controllers;
 [Route("api/commandes")]
 public class CommandeController : ControllerBase
 {
-    private readonly ICommandeRepository _commandeRepository;
+    private readonly ICommandeUseCases _commandeUseCases;
 
-    public CommandeController(ICommandeRepository commandeRepository)
+    public CommandeController(ICommandeUseCases commandeUseCases)
     {
-        _commandeRepository = commandeRepository;
+        _commandeUseCases = commandeUseCases;
     }
 
     [HttpPost]
     public IActionResult Create([FromBody] CommandeCreateDto commande)
     {
         var idUtilisateur = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var id = _commandeRepository.Create(commande, idUtilisateur);
-        return CreatedAtAction(nameof(GetById), new { id }, _commandeRepository.GetById(id));
+        var detail = _commandeUseCases.Create(commande, idUtilisateur);
+        return CreatedAtAction(nameof(GetById), new { id = detail.Id }, detail);
     }
 
     [HttpGet("{id:int}")]
     public IActionResult GetById(int id)
     {
-        var commande = _commandeRepository.GetById(id);
+        var commande = _commandeUseCases.GetById(id);
         return commande is null ? NotFound() : Ok(commande);
     }
 }

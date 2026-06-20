@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RestaurantManager.Core.Interfaces;
+using RestaurantManager.Core.UseCases.Abstractions;
 
 namespace RestaurantManager.API.Controllers;
 
@@ -9,30 +9,30 @@ namespace RestaurantManager.API.Controllers;
 [Route("api/cuisine")]
 public class CuisineController : ControllerBase
 {
-    private readonly ICommandeRepository _commandeRepository;
+    private readonly ICuisineUseCases _cuisineUseCases;
 
-    public CuisineController(ICommandeRepository commandeRepository)
+    public CuisineController(ICuisineUseCases cuisineUseCases)
     {
-        _commandeRepository = commandeRepository;
+        _cuisineUseCases = cuisineUseCases;
     }
 
     [HttpGet("tickets")]
     public IActionResult GetTickets()
     {
-        return Ok(_commandeRepository.GetTicketsEnCours());
+        return Ok(_cuisineUseCases.GetTickets());
     }
 
     [HttpPatch("lignes/{idDetail:int}/prepare")]
     public IActionResult MarquerLignePrete(int idDetail)
     {
-        _commandeRepository.MarquerLignePrete(idDetail);
+        _cuisineUseCases.MarquerLignePrete(idDetail);
         return NoContent();
     }
 
     [HttpPost("commandes/{idCommande:int}/servie")]
     public IActionResult MarquerCommandeServie(int idCommande)
     {
-        _commandeRepository.MarquerCommandeServie(idCommande);
+        _cuisineUseCases.MarquerCommandeServie(idCommande);
         return NoContent();
     }
 }

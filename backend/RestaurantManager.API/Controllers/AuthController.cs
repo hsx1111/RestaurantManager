@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantManager.Core.DTOs;
-using RestaurantManager.Core.Exceptions;
-using RestaurantManager.Core.Interfaces;
+using RestaurantManager.Core.UseCases.Abstractions;
 
 namespace RestaurantManager.API.Controllers;
 
@@ -13,25 +12,17 @@ namespace RestaurantManager.API.Controllers;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthService _authService;
+    private readonly IAuthUseCases _authUseCases;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IAuthUseCases authUseCases)
     {
-        _authService = authService;
+        _authUseCases = authUseCases;
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        LoginResponse utilisateur;
-        try
-        {
-            utilisateur = _authService.Login(request.Pin);
-        }
-        catch (PinInvalidException ex)
-        {
-            return Unauthorized(new { message = ex.Message });
-        }
+        var utilisateur = _authUseCases.Login(request.Pin);
 
         var claims = new List<Claim>
         {

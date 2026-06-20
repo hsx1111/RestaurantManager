@@ -1,15 +1,16 @@
-using RestaurantManager.Core.Entities;
 using RestaurantManager.Core.Exceptions;
 using RestaurantManager.Core.Interfaces;
+using RestaurantManager.Core.Models;
+using RestaurantManager.Core.UseCases.Abstractions;
 
-namespace RestaurantManager.Core.Services;
+namespace RestaurantManager.Core.UseCases;
 
-public class CategorieService : ICategorieService
+public class CategorieUseCases : ICategorieUseCases
 {
     private readonly ICategorieRepository _categorieRepository;
     private readonly IPlatRepository _platRepository;
 
-    public CategorieService(ICategorieRepository categorieRepository, IPlatRepository platRepository)
+    public CategorieUseCases(ICategorieRepository categorieRepository, IPlatRepository platRepository)
     {
         _categorieRepository = categorieRepository;
         _platRepository = platRepository;

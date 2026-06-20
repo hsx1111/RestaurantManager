@@ -1,6 +1,6 @@
 using RestaurantManager.Core.Enums;
 
-namespace RestaurantManager.Core.Entities;
+namespace RestaurantManager.Core.Models;
 
 public class Commande
 {

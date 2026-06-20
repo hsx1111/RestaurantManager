@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantManager.Core.DTOs;
-using RestaurantManager.Core.Exceptions;
-using RestaurantManager.Core.Interfaces;
+using RestaurantManager.Core.UseCases.Abstractions;
 
 namespace RestaurantManager.API.Controllers;
 
@@ -11,75 +10,43 @@ namespace RestaurantManager.API.Controllers;
 [Route("api/plats")]
 public class PlatController : ControllerBase
 {
-    private readonly IPlatRepository _platRepository;
+    private readonly IPlatUseCases _platUseCases;
 
-    public PlatController(IPlatRepository platRepository)
+    public PlatController(IPlatUseCases platUseCases)
     {
-        _platRepository = platRepository;
+        _platUseCases = platUseCases;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(_platRepository.GetAllAvecCategorie());
+        return Ok(_platUseCases.GetAll());
     }
 
     [HttpGet("{id:int}")]
     public IActionResult GetById(int id)
     {
-        try
-        {
-            return Ok(_platRepository.GetById(id));
-        }
-        catch (PlatNotFoundException)
-        {
-            return NotFound();
-        }
+        return Ok(_platUseCases.GetById(id));
     }
 
     [HttpPost]
     public IActionResult Create([FromBody] PlatCreateDto plat)
     {
-        try
-        {
-            var id = _platRepository.Add(plat);
-            return CreatedAtAction(nameof(GetById), new { id }, _platRepository.GetById(id));
-        }
-        catch (CategorieNotFoundException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var cree = _platUseCases.Create(plat);
+        return CreatedAtAction(nameof(GetById), new { id = cree.IdPlat }, cree);
     }
 
     [HttpPut("{id:int}")]
     public IActionResult Update(int id, [FromBody] PlatUpdateDto plat)
     {
-        try
-        {
-            _platRepository.Update(id, plat);
-            return NoContent();
-        }
-        catch (PlatNotFoundException)
-        {
-            return NotFound();
-        }
-        catch (CategorieNotFoundException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        _platUseCases.Update(id, plat);
+        return NoContent();
     }
 
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        try
-        {
-            _platRepository.Delete(id);
-            return NoContent();
-        }
-        catch (PlatNotFoundException)
-        {
-            return NotFound();
-        }
+        _platUseCases.Delete(id);
+        return NoContent();
     }
 }

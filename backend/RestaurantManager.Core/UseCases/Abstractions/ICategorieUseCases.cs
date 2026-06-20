@@ -1,8 +1,8 @@
-using RestaurantManager.Core.Entities;
+using RestaurantManager.Core.Models;
 
-namespace RestaurantManager.Core.Interfaces;
+namespace RestaurantManager.Core.UseCases.Abstractions;
 
-public interface ICategorieService
+public interface ICategorieUseCases
 {
     IEnumerable<Categorie> GetAll();
     Categorie GetById(int id);

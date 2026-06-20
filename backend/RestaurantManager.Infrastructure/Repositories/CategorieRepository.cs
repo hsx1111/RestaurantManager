@@ -1,7 +1,8 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
-using RestaurantManager.Core.Entities;
+using RestaurantManager.Core.Exceptions;
+using RestaurantManager.Core.Models;
 using RestaurantManager.Core.Interfaces;
 
 namespace RestaurantManager.Infrastructure.Repositories;
@@ -35,14 +36,28 @@ public class CategorieRepository : ICategorieRepository
         using var connection = new MySqlConnection(_connectionString);
         const string sql = @"INSERT INTO categorie (NomCategorie) VALUES (@NomCategorie);
                              SELECT LAST_INSERT_ID();";
-        return connection.ExecuteScalar<int>(sql, new { categorie.NomCategorie });
+        try
+        {
+            return connection.ExecuteScalar<int>(sql, new { categorie.NomCategorie });
+        }
+        catch (MySqlException ex) when (ex.Number == (int)MySqlErrorCode.DuplicateKeyEntry)
+        {
+            throw new CategorieDupliqueeException();
+        }
     }
 
     public int Update(Categorie categorie)
     {
         using var connection = new MySqlConnection(_connectionString);
         const string sql = "UPDATE categorie SET NomCategorie = @NomCategorie WHERE IdCategorie = @IdCategorie";
-        return connection.Execute(sql, new { categorie.NomCategorie, categorie.IdCategorie });
+        try
+        {
+            return connection.Execute(sql, new { categorie.NomCategorie, categorie.IdCategorie });
+        }
+        catch (MySqlException ex) when (ex.Number == (int)MySqlErrorCode.DuplicateKeyEntry)
+        {
+            throw new CategorieDupliqueeException();
+        }
     }
 
     public int Delete(int id)

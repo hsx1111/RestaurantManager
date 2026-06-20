@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RestaurantManager.Core.Interfaces;
+using RestaurantManager.Core.UseCases.Abstractions;
 
 namespace RestaurantManager.API.Controllers;
 
@@ -9,16 +9,16 @@ namespace RestaurantManager.API.Controllers;
 [Route("api/tables")]
 public class TableController : ControllerBase
 {
-    private readonly ITableRepository _tableRepository;
+    private readonly ITableUseCases _tableUseCases;
 
-    public TableController(ITableRepository tableRepository)
+    public TableController(ITableUseCases tableUseCases)
     {
-        _tableRepository = tableRepository;
+        _tableUseCases = tableUseCases;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(_tableRepository.GetAll());
+        return Ok(_tableUseCases.GetAll());
     }
 }
