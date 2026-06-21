@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, viewChild } from '@angular/core';
+import { Component, OnInit, computed, inject, signal, viewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommandeService } from '../../services/commande.service';
 import { ToastService } from '../../services/toast.service';
@@ -29,6 +29,19 @@ export class TableDetailComponent implements OnInit {
 
   readonly modes = ['Especes', 'Carte', 'Cheque', 'Virement'];
 
+  readonly estEnCours = computed(() => this.commande()?.statut === 'EnCours');
+  readonly estServie = computed(() => this.commande()?.statut === 'Servie');
+  readonly libelleStatut = computed(() => {
+    switch (this.commande()?.statut) {
+      case 'EnCours':
+        return 'En préparation';
+      case 'Servie':
+        return 'Prête à encaisser';
+      default:
+        return '';
+    }
+  });
+
   ngOnInit(): void {
     this.charger();
   }
@@ -36,7 +49,7 @@ export class TableDetailComponent implements OnInit {
   private charger(): void {
     this.commandeService.getParTable(this.idTable).subscribe({
       next: (commande) => this.commande.set(commande),
-      error: () => this.erreur.set('Aucune commande en cours sur cette table.')
+      error: () => this.erreur.set('Aucune commande active sur cette table.')
     });
   }
 
@@ -52,7 +65,7 @@ export class TableDetailComponent implements OnInit {
           this.commande.set(maj);
           this.menu()?.reset();
         },
-        error: () => this.erreur.set("Échec de l'ajout des plats.")
+        error: (err) => this.erreur.set(err?.error?.message ?? "Échec de l'ajout des plats.")
       });
   }
 
@@ -67,7 +80,7 @@ export class TableDetailComponent implements OnInit {
         this.toast.show(`Table ${this.idTable} encaissée : ${facture.montantTotal.toFixed(2)} € (${facture.modePaiement}).`);
         this.router.navigate(['/plan-salle']);
       },
-      error: () => this.erreur.set('Échec de la clôture.')
+      error: (err) => this.erreur.set(err?.error?.message ?? 'Échec de la clôture.')
     });
   }
 

@@ -11,7 +11,11 @@
   @if (commande(); as cmd) {
     <div class="grille">
       <div class="recap">
-        <h2>Commande en cours</h2>
+        <div class="recap-entete">
+          <h2>Commande</h2>
+          <span class="badge" [class.encours]="estEnCours()" [class.servie]="estServie()">{{ libelleStatut() }}</span>
+        </div>
+
         <ul class="lignes">
           @for (ligne of cmd.lignes; track ligne.idPlat) {
             <li>
@@ -27,21 +31,33 @@
 
         <div class="cloture">
           <label for="mode">Mode de paiement</label>
-          <select id="mode" [value]="modePaiement()" (change)="modePaiement.set($any($event.target).value)">
+          <select
+            id="mode"
+            [value]="modePaiement()"
+            (change)="modePaiement.set($any($event.target).value)"
+            [disabled]="!estServie()"
+          >
             @for (mode of modes; track mode) {
               <option [value]="mode">{{ mode }}</option>
             }
           </select>
-          <button type="button" class="encaisser" (click)="confirmOuvert.set(true)">
+
+          @if (estEnCours()) {
+            <p class="info">En attente de la préparation par la cuisine.</p>
+          }
+
+          <button type="button" class="encaisser" [disabled]="!estServie()" (click)="confirmOuvert.set(true)">
             Encaisser et libérer la table
           </button>
         </div>
       </div>
 
-      <div class="ajout">
-        <h2>Ajouter des plats</h2>
-        <app-menu-panier libelleValider="Ajouter à la commande" (valider)="onAjouter($event)" />
-      </div>
+      @if (estEnCours()) {
+        <div class="ajout">
+          <h2>Ajouter des plats</h2>
+          <app-menu-panier libelleValider="Ajouter à la commande" (valider)="onAjouter($event)" />
+        </div>
+      }
     </div>
   }
 </section>

@@ -34,9 +34,9 @@ public class CommandeController : ControllerBase
     }
 
     [HttpGet("table/{idTable:int}")]
-    public IActionResult GetEnCoursParTable(int idTable)
+    public IActionResult GetActiveParTable(int idTable)
     {
-        var commande = _commandeUseCases.GetEnCoursParTable(idTable);
+        var commande = _commandeUseCases.GetActiveParTable(idTable);
         return commande is null ? NotFound() : Ok(commande);
     }
 

@@ -34,7 +34,7 @@ public class GlobalExceptionHandlerMiddleware
                 CategorieNotFoundException or PlatNotFoundException or UtilisateurNotFoundException
                     or TableNotFoundException or ReservationNotFoundException => StatusCodes.Status404NotFound,
                 CategorieEnUsageException or TableEnUsageException or ReservationChevauchementException
-                    or CategorieDupliqueeException => StatusCodes.Status409Conflict,
+                    or CategorieDupliqueeException or CommandeNonServieException => StatusCodes.Status409Conflict,
                 ArgumentException => StatusCodes.Status400BadRequest,
                 _ => StatusCodes.Status500InternalServerError
             };

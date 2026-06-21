@@ -65,7 +65,7 @@ public class CommandeRepository : ICommandeRepository
     public CommandeDetailDto? GetById(int id)
     {
         const string sql = @"SELECT c.IdCommande AS Id, c.IdTable AS NumeroTable,
-                                    CONCAT(u.Prenom, ' ', u.Nom) AS NomServeur,
+                                    CONCAT(u.Prenom, ' ', u.Nom) AS NomServeur, c.Statut AS Statut,
                                     d.IdPlat AS IdPlat, p.NomPlat AS NomPlat,
                                     d.Quantite AS Quantite, d.PrixUnitaire AS PrixUnitaire
                              FROM commande c
@@ -76,17 +76,17 @@ public class CommandeRepository : ICommandeRepository
         return ChargerCommande(sql, new { Id = id });
     }
 
-    public CommandeDetailDto? GetCommandeEnCoursParTable(int idTable)
+    public CommandeDetailDto? GetCommandeActiveParTable(int idTable)
     {
         const string sql = @"SELECT c.IdCommande AS Id, c.IdTable AS NumeroTable,
-                                    CONCAT(u.Prenom, ' ', u.Nom) AS NomServeur,
+                                    CONCAT(u.Prenom, ' ', u.Nom) AS NomServeur, c.Statut AS Statut,
                                     d.IdPlat AS IdPlat, p.NomPlat AS NomPlat,
                                     d.Quantite AS Quantite, d.PrixUnitaire AS PrixUnitaire
                              FROM commande c
                              INNER JOIN utilisateur u ON u.IdUtilisateur = c.IdUtilisateur
                              INNER JOIN detailcommande d ON d.IdCommande = c.IdCommande
                              INNER JOIN plat p ON p.IdPlat = d.IdPlat
-                             WHERE c.IdTable = @IdTable AND c.Statut = 'EnCours'";
+                             WHERE c.IdTable = @IdTable AND c.Statut IN ('EnCours', 'Servie')";
         return ChargerCommande(sql, new { IdTable = idTable });
     }
 

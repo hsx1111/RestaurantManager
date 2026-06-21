@@ -22,6 +22,7 @@ export interface CommandeDetail {
   id: number;
   numeroTable: number;
   nomServeur: string;
+  statut: 'EnCours' | 'Servie' | 'Facturee';
   lignes: LigneDetail[];
   total: number;
 }

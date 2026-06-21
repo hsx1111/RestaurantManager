@@ -1,5 +1,6 @@
 using RestaurantManager.Core.DTOs;
 using RestaurantManager.Core.Enums;
+using RestaurantManager.Core.Exceptions;
 using RestaurantManager.Core.Interfaces;
 using RestaurantManager.Core.UseCases.Abstractions;
 
@@ -30,9 +31,9 @@ public class CommandeUseCases : ICommandeUseCases
         return _commandeRepository.GetById(id);
     }
 
-    public CommandeDetailDto? GetEnCoursParTable(int idTable)
+    public CommandeDetailDto? GetActiveParTable(int idTable)
     {
-        return _commandeRepository.GetCommandeEnCoursParTable(idTable);
+        return _commandeRepository.GetCommandeActiveParTable(idTable);
     }
 
     public CommandeDetailDto AjouterLignes(int idCommande, List<LigneCreateDto> lignes)
@@ -42,12 +43,27 @@ public class CommandeUseCases : ICommandeUseCases
             throw new ArgumentException("Aucun plat à ajouter.");
         }
 
+        var commande = _commandeRepository.GetById(idCommande);
+        if (commande is null || commande.Statut != "EnCours")
+        {
+            throw new ArgumentException("Impossible d'ajouter des plats : la commande n'est plus en préparation.");
+        }
+
         _commandeRepository.AjouterLignes(idCommande, lignes);
         return _commandeRepository.GetById(idCommande)!;
     }
 
     public FactureDto Cloturer(int idCommande, string modePaiement)
     {
+        var commande = _commandeRepository.GetById(idCommande);
+        if (commande is null)
+        {
+            throw new ArgumentException("Commande introuvable.");
+        }
+        if (commande.Statut != "Servie")
+        {
+            throw new CommandeNonServieException();
+        }
         if (!Enum.TryParse<ModePaiement>(modePaiement, out _))
         {
             throw new ArgumentException("Mode de paiement invalide.");
