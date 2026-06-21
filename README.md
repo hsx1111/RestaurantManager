@@ -20,7 +20,7 @@ Application de gestion de restaurant couvrant **9 fonctionnalités** : authentif
 |-------|-----------------|------------------|
 | .NET SDK | 8.0.x | 8.0.416 |
 | Node.js | 20.x ou supérieur | 24.x |
-| Angular CLI | 17.x ou supérieur (syntaxe `@if`/`@for`/`@switch`) | 21.x |
+| Angular CLI | 17.x ou supérieur — *optionnel, requis seulement pour `ng serve`* | 21.x |
 | MySQL | 8.x ou supérieur | 9.x |
 
 ## Installation
@@ -32,10 +32,11 @@ Application de gestion de restaurant couvrant **9 fonctionnalités** : authentif
    ```
 
 2. **Créer la base de données**
-   Se connecter à MySQL en tant que `root` et exécuter le script. Il crée la base `Restaurant_manager`, les tables, le trigger anti-chevauchement des réservations **et** l'utilisateur applicatif `restaurant_app` (droits CRUD uniquement).
+   Cette étape doit être exécutée avec un **compte administrateur MySQL** (`root` ou équivalent) : le script effectue des opérations d'administration (création de base, de tables et d'un utilisateur, attribution de droits). Il crée la base `Restaurant_manager`, les tables, le trigger anti-chevauchement des réservations **et** l'utilisateur applicatif `restaurant_app` (droits CRUD uniquement). L'application, elle, se connectera ensuite avec ce compte limité — jamais en root.
    ```bash
    mysql -u root -p < database/Creation_tables.sql
    ```
+   *(Si votre compte `root` MySQL n'a pas de mot de passe, retirez l'option `-p` : `mysql -u root < database/Creation_tables.sql`.)*
 
 3. **Lancer le backend**
    ```bash
@@ -49,9 +50,15 @@ Application de gestion de restaurant couvrant **9 fonctionnalités** : authentif
    ```bash
    cd frontend/restaurant-manager-frontend
    npm install
-   ng serve
    ```
-   Ouvrir **http://localhost:4200**.
+   Puis démarrer le serveur de développement, au choix :
+   ```bash
+   npm start      # ne requiert aucune installation globale (utilise le CLI Angular local)
+   ```
+   ```bash
+   ng serve       # alternative si le CLI Angular est installé globalement (npm install -g @angular/cli)
+   ```
+   Les deux commandes sont équivalentes (même serveur, même port). Ouvrir ensuite **http://localhost:4200**.
 
 ## Comptes de démonstration
 
