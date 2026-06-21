@@ -146,6 +146,9 @@ DELIMITER ;
 -- Utilisateur MySQL dédié à l'application
 -- Droits limités aux opérations CRUD sur Restaurant_manager
 -- ============================================================
-CREATE USER IF NOT EXISTS 'restaurant_app'@'localhost' IDENTIFIED BY 'RestoApp2026!';
+-- DROP avant CREATE : rend le script pleinement rejouable et garantit
+-- que le mot de passe est toujours réinitialisé à la valeur attendue.
+DROP USER IF EXISTS 'restaurant_app'@'localhost';
+CREATE USER 'restaurant_app'@'localhost' IDENTIFIED BY 'RestoApp2026!';
 GRANT SELECT, INSERT, UPDATE, DELETE ON Restaurant_manager.* TO 'restaurant_app'@'localhost';
 FLUSH PRIVILEGES;

@@ -33,10 +33,15 @@ Application de gestion de restaurant couvrant **9 fonctionnalités** : authentif
 
 2. **Créer la base de données**
    Cette étape doit être exécutée avec un **compte administrateur MySQL** (`root` ou équivalent) : le script effectue des opérations d'administration (création de base, de tables et d'un utilisateur, attribution de droits). Il crée la base `Restaurant_manager`, les tables, le trigger anti-chevauchement des réservations **et** l'utilisateur applicatif `restaurant_app` (droits CRUD uniquement). L'application, elle, se connectera ensuite avec ce compte limité — jamais en root.
+   Sous **macOS / Linux** (ou l'invite de commandes `cmd` de Windows) :
    ```bash
    mysql -u root -p < database/Creation_tables.sql
    ```
-   *(Si votre compte `root` MySQL n'a pas de mot de passe, retirez l'option `-p` : `mysql -u root < database/Creation_tables.sql`.)*
+   Sous **Windows / PowerShell**, l'opérateur `<` n'est pas supporté : utilisez plutôt un pipe (adaptez le chemin de `mysql.exe` à votre version) :
+   ```powershell
+   Get-Content database\Creation_tables.sql | & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p
+   ```
+   *(Si votre compte `root` MySQL n'a pas de mot de passe, retirez l'option `-p`.)*
 
 3. **Lancer le backend**
    ```bash
@@ -58,7 +63,7 @@ Application de gestion de restaurant couvrant **9 fonctionnalités** : authentif
    ```bash
    ng serve       # alternative si le CLI Angular est installé globalement (npm install -g @angular/cli)
    ```
-   Les deux commandes sont équivalentes (même serveur, même port). Ouvrir ensuite **http://localhost:4200**.
+   Les deux commandes sont équivalentes : `npm start` exécute le script `start` du `package.json`, qui lance `ng serve` via le CLI Angular **installé localement** par `npm install` — aucune installation globale n'est donc nécessaire. `ng serve` fait exactement la même chose mais suppose le CLI Angular **installé globalement** (`npm install -g @angular/cli`). En cas de doute, privilégiez `npm start`. Ouvrir ensuite **http://localhost:4200**.
 
 ## Comptes de démonstration
 
